@@ -74,6 +74,10 @@ export default function Index() {
         setVault(payload);
         setNote("// Encrypted and stored locally.");
         console.log("Encrypt OK", payload);
+        // success visuals and notification
+        setSuccessGlow(true);
+        toast.success("Message encrypted & stored in vault.");
+        setTimeout(() => setSuccessGlow(false), 1800);
       } else {
         const payload = loadVault();
         if (!payload) {
@@ -90,6 +94,9 @@ export default function Index() {
             clearVault();
             setVault(null);
             console.log("Burn after reading: vault cleared");
+            toast.success("Decrypted — vault cleared (burned).");
+          } else {
+            toast.success("Message decrypted.");
           }
         } catch (e) {
           console.error(e);
