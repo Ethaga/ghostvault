@@ -76,7 +76,9 @@ Access it locally:
 ### GhostVault can be deployed as:
 
 🧱 A Docker container app inside DAWN Black Box
+
 🕵️ A privacy layer to secure logs, credentials, or local AI data
+
 💡 A Cypherpunk showcase demonstrating decentralized privacy tools
 
 It illustrates the DAWN mission — empowering individuals to control their own data and connectivity.
@@ -90,8 +92,7 @@ It illustrates the DAWN mission — empowering individuals to control their own 
 
 ## 🔥 Conclusion
 
-### Once deployed, GhostVault becomes a privacy sandbox within the DAWN ecosystem —
-showing how users can truly own and secure their data locally.
+### Once deployed, GhostVault becomes a privacy sandbox within the DAWN ecosystem , showing how users can truly own and secure their data locally.
 
 
 
