@@ -107,10 +107,13 @@ export async function decryptToText(payload: VaultPayload, passphrase: string): 
   try {
     const salt = fromBase64(payload.salt);
     const iv = fromBase64(payload.iv);
+    console.log("decryptToText: deriving key with salt len", salt.length);
     const key = await deriveKey(passphrase, salt);
     const cipherBytes = fromBase64(payload.cipher);
-    const plainBuf = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, cipherBytes);
-    return textDecoder.decode(plainBuf);
+    console.log("decryptToText: decrypting, iv len", iv.length, "cipher len", cipherBytes.length);
+    const plainBuf = await crypto.subtle.decrypt({ name: "AES-GCM", iv: iv.buffer ?? iv }, key, cipherBytes.buffer ?? cipherBytes);
+    const decoded = textDecoder.decode(plainBuf as ArrayBuffer);
+    return decoded;
   } catch (err) {
     // Normalize Web Crypto errors to a consistent message
     console.error("Decrypt operation failed:", err);
