@@ -47,26 +47,32 @@ export function generatePassphrase(length = 20): string {
 }
 
 async function deriveKey(passphrase: string, salt: Uint8Array): Promise<CryptoKey> {
-  const passBytes = textEncoder.encode(passphrase);
-  const keyMaterial = await crypto.subtle.importKey(
-    "raw",
-    passBytes,
-    { name: "PBKDF2" },
-    false,
-    ["deriveKey"],
-  );
-  return crypto.subtle.deriveKey(
-    {
-      name: "PBKDF2",
-      salt,
-      iterations: 250_000,
-      hash: "SHA-256",
-    },
-    keyMaterial,
-    { name: "AES-GCM", length: 256 },
-    false,
-    ["encrypt", "decrypt"],
-  );
+  try {
+    const passBytes = textEncoder.encode(passphrase);
+    const keyMaterial = await crypto.subtle.importKey(
+      "raw",
+      passBytes,
+      { name: "PBKDF2" },
+      false,
+      ["deriveKey"],
+    );
+    const derived = await crypto.subtle.deriveKey(
+      {
+        name: "PBKDF2",
+        salt: salt.buffer ?? salt,
+        iterations: 250_000,
+        hash: "SHA-256",
+      },
+      keyMaterial,
+      { name: "AES-GCM", length: 256 },
+      false,
+      ["encrypt", "decrypt"],
+    );
+    return derived;
+  } catch (err) {
+    console.error("deriveKey failed:", err);
+    throw new Error("Key derivation failed");
+  }
 }
 
 export async function encryptText(plaintext: string, passphrase: string): Promise<VaultPayload> {
