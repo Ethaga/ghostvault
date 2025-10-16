@@ -21,7 +21,8 @@ function toBase64(buffer: ArrayBuffer | Uint8Array): string {
   for (let i = 0; i < bytes.length; i += chunkSize) {
     const chunk = bytes.subarray(i, i + chunkSize);
     let chunkStr = "";
-    for (let j = 0; j < chunk.length; j++) chunkStr += String.fromCharCode(chunk[j]);
+    for (let j = 0; j < chunk.length; j++)
+      chunkStr += String.fromCharCode(chunk[j]);
     binary += chunkStr;
   }
   return btoa(binary);
@@ -46,7 +47,10 @@ export function generatePassphrase(length = 20): string {
   return out;
 }
 
-async function deriveKey(passphrase: string, salt: Uint8Array): Promise<CryptoKey> {
+async function deriveKey(
+  passphrase: string,
+  salt: Uint8Array,
+): Promise<CryptoKey> {
   try {
     const passBytes = textEncoder.encode(passphrase);
     const keyMaterial = await crypto.subtle.importKey(
@@ -75,7 +79,10 @@ async function deriveKey(passphrase: string, salt: Uint8Array): Promise<CryptoKe
   }
 }
 
-export async function encryptText(plaintext: string, passphrase: string): Promise<VaultPayload> {
+export async function encryptText(
+  plaintext: string,
+  passphrase: string,
+): Promise<VaultPayload> {
   try {
     const salt = new Uint8Array(16);
     crypto.getRandomValues(salt);
@@ -85,9 +92,21 @@ export async function encryptText(plaintext: string, passphrase: string): Promis
     console.log("encryptText: deriving key...");
     const key = await deriveKey(passphrase, salt);
     const data = textEncoder.encode(plaintext);
-    console.log("encryptText: encrypting, iv length", iv.length, "data len", data.length);
-    const cipherBuf = await crypto.subtle.encrypt({ name: "AES-GCM", iv: iv.buffer ?? iv }, key, data);
-    console.log("encryptText: encryption completed, cipher size", (cipherBuf as ArrayBuffer).byteLength);
+    console.log(
+      "encryptText: encrypting, iv length",
+      iv.length,
+      "data len",
+      data.length,
+    );
+    const cipherBuf = await crypto.subtle.encrypt(
+      { name: "AES-GCM", iv: iv.buffer ?? iv },
+      key,
+      data,
+    );
+    console.log(
+      "encryptText: encryption completed, cipher size",
+      (cipherBuf as ArrayBuffer).byteLength,
+    );
 
     const payload: VaultPayload = {
       v: 1,
@@ -103,15 +122,27 @@ export async function encryptText(plaintext: string, passphrase: string): Promis
   }
 }
 
-export async function decryptToText(payload: VaultPayload, passphrase: string): Promise<string> {
+export async function decryptToText(
+  payload: VaultPayload,
+  passphrase: string,
+): Promise<string> {
   try {
     const salt = fromBase64(payload.salt);
     const iv = fromBase64(payload.iv);
     console.log("decryptToText: deriving key with salt len", salt.length);
     const key = await deriveKey(passphrase, salt);
     const cipherBytes = fromBase64(payload.cipher);
-    console.log("decryptToText: decrypting, iv len", iv.length, "cipher len", cipherBytes.length);
-    const plainBuf = await crypto.subtle.decrypt({ name: "AES-GCM", iv: iv.buffer ?? iv }, key, cipherBytes.buffer ?? cipherBytes);
+    console.log(
+      "decryptToText: decrypting, iv len",
+      iv.length,
+      "cipher len",
+      cipherBytes.length,
+    );
+    const plainBuf = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv: iv.buffer ?? iv },
+      key,
+      cipherBytes.buffer ?? cipherBytes,
+    );
     const decoded = textDecoder.decode(plainBuf as ArrayBuffer);
     return decoded;
   } catch (err) {
@@ -128,7 +159,8 @@ export function loadVault(): VaultPayload | null {
     const raw = localStorage.getItem(VAULT_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as VaultPayload;
-    if (parsed && parsed.v === 1 && parsed.cipher && parsed.iv && parsed.salt) return parsed;
+    if (parsed && parsed.v === 1 && parsed.cipher && parsed.iv && parsed.salt)
+      return parsed;
     return null;
   } catch {
     return null;
