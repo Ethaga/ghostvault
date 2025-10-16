@@ -152,6 +152,10 @@ export default function Index() {
         <main>
           <div className="rounded-xl border bg-card/60 backdrop-blur glow">
             <div className="p-4 sm:p-6">
+              <div className="flex items-start justify-between">
+                <div className="text-xs text-muted-foreground">Powered by DAWN Black Box</div>
+                <a className="text-xs underline hover:text-primary" href="https://drive.google.com/drive/folders/1qg8O35K1SAB4tCcasXUyCCYFC66_H9p1" target="_blank" rel="noreferrer">View Whitepaper</a>
+              </div>
               <label htmlFor="note" className="sr-only">Secret note</label>
               <textarea
                 id="note"
@@ -159,8 +163,10 @@ export default function Index() {
                 onChange={(e) => setNote(e.target.value)}
                 placeholder="// Type your secret and lock it away..."
                 rows={10}
-                className="w-full resize-y rounded-lg bg-black/60 text-[15px] leading-relaxed p-4 outline-none ring-1 ring-transparent focus:ring-2 focus:ring-primary caret-primary selection:bg-primary/20 selection:text-primary glow"
+                className={"w-full resize-y rounded-lg bg-black/60 text-[15px] leading-relaxed p-4 outline-none ring-1 ring-transparent focus:ring-2 focus:ring-primary caret-primary selection:bg-primary/20 selection:text-primary glow" + (successGlow ? " textarea-success" : "")}
               />
+
+              <p className="mt-2 text-xs text-muted-foreground">GhostVault runs locally on the DAWN Black Box — encrypting your data where it lives.</p>
 
               <div className="mt-4 flex flex-wrap items-center gap-3">
                 <Button onClick={() => openKeyModal("encrypt")} className="btn-neon glow" disabled={!note.trim()}>
