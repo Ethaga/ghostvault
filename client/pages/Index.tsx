@@ -190,6 +190,10 @@ export default function Index() {
         </main>
       </div>
 
+      <footer className="mx-auto max-w-3xl px-4 py-4 text-center text-xs text-muted-foreground">
+        <div>GhostVault v1.0 — Local Privacy dApp for DAWN Hackathon.</div>
+      </footer>
+
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="bg-black/80 backdrop-blur border-primary/40 glow">
           <DialogHeader>
