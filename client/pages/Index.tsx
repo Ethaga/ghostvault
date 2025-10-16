@@ -69,25 +69,34 @@ export default function Index() {
         const payload = await encryptText(note, pass);
         saveVault(payload);
         setVault(payload);
-        setNote("");
+        setNote("// Encrypted and stored locally.");
+        console.log("Encrypt OK", payload);
       } else {
         const payload = loadVault();
         if (!payload) {
           setBusy(false);
           setOpen(false);
+          alert("No vault data found.");
           return;
         }
-        const plain = await decryptToText(payload, pass);
-        setNote(plain);
-        if (burn) {
-          clearVault();
-          setVault(null);
+        try {
+          const plain = await decryptToText(payload, pass);
+          setNote(plain);
+          console.log("Decrypt OK", plain);
+          if (burn) {
+            clearVault();
+            setVault(null);
+            console.log("Burn after reading: vault cleared");
+          }
+        } catch (e) {
+          console.error(e);
+          alert("Invalid passphrase or corrupted data.");
         }
       }
       setOpen(false);
     } catch (err) {
       console.error(err);
-      alert("Invalid key or corrupted data.");
+      alert("Invalid passphrase or corrupted data.");
     } finally {
       setBusy(false);
     }
