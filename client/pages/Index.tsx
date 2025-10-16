@@ -198,7 +198,7 @@ export default function Index() {
                   type="button"
                   variant="secondary"
                   onClick={() => setPass(generatePassphrase())}
-                  className="glow"
+                  className="btn-outline-neon glow"
                 >
                   <Flame className="h-4 w-4" /> Generate
                 </Button>
@@ -208,7 +208,7 @@ export default function Index() {
                   type="button"
                   variant="outline"
                   onClick={() => navigator.clipboard.writeText(pass)}
-                  className="border-primary/40 text-primary hover:bg-primary/10 glow"
+                  className="btn-outline-neon glow"
                 >
                   Copy Key
                 </Button>
