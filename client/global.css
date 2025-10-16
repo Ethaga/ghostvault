@@ -149,4 +149,21 @@
     box-shadow: 0 8px 22px -8px hsl(var(--accent-purple) / 0.32);
     color: hsl(var(--primary-foreground));
   }
+
+  .eye-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 38px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.02);
+    background: rgba(0,0,0,0.16);
+    transition: box-shadow 140ms ease, transform 100ms ease;
+  }
+
+  .eye-btn:hover {
+    box-shadow: 0 6px 18px -6px hsl(var(--accent-purple) / 0.45), 0 6px 18px -6px hsl(var(--primary) / 0.45);
+    transform: translateY(-1px);
+  }
 }
