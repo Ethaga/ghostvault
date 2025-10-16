@@ -89,12 +89,18 @@ export async function encryptText(plaintext: string, passphrase: string): Promis
 }
 
 export async function decryptToText(payload: VaultPayload, passphrase: string): Promise<string> {
-  const salt = fromBase64(payload.salt);
-  const iv = fromBase64(payload.iv);
-  const key = await deriveKey(passphrase, salt);
-  const cipherBytes = fromBase64(payload.cipher);
-  const plainBuf = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, cipherBytes);
-  return textDecoder.decode(plainBuf);
+  try {
+    const salt = fromBase64(payload.salt);
+    const iv = fromBase64(payload.iv);
+    const key = await deriveKey(passphrase, salt);
+    const cipherBytes = fromBase64(payload.cipher);
+    const plainBuf = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, cipherBytes);
+    return textDecoder.decode(plainBuf);
+  } catch (err) {
+    // Normalize Web Crypto errors to a consistent message
+    console.error("Decrypt operation failed:", err);
+    throw new Error("Invalid passphrase or corrupted data.");
+  }
 }
 
 export const VAULT_KEY = "vaultData";
