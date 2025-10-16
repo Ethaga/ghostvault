@@ -103,12 +103,16 @@ export default function Index() {
       <div className="mx-auto max-w-3xl px-4 py-10">
         <header className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-md bg-[hsl(var(--primary)_/_0.15)] flex items-center justify-center glow">
-              <Shield className="h-5 w-5 text-primary" />
+            <div className="h-9 w-9 rounded-md bg-[hsl(var(--primary)_/_0.12)] flex items-center justify-center glow">
+              {/* Inline DAWN geometric mark - replace with official logo when provided */}
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                <rect x="3" y="3" width="18" height="18" rx="3" stroke="hsl(var(--primary))" strokeWidth="1.2" fill="none" />
+                <path d="M6 17L12 7L18 17" stroke="hsl(var(--primary))" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </div>
             <div>
               <h1 className="text-2xl font-semibold tracking-widest neon-text">GhostVault</h1>
-              <p className="text-xs text-muted-foreground -mt-0.5">Cypherpunk Black Box</p>
+              <p className="text-xs text-muted-foreground -mt-0.5">Private by Design. Powered by DAWN.</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
