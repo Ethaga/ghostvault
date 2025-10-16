@@ -13,16 +13,26 @@ export type VaultPayload = {
   ts: number; // timestamp (ms)
 };
 
-// URL-safe base64 helpers
-function toBase64(bytes: ArrayBuffer): string {
-  const bin = String.fromCharCode(...new Uint8Array(bytes));
-  return btoa(bin);
+// Robust base64 helpers (avoid spreading large arrays)
+function toBase64(buffer: ArrayBuffer | Uint8Array): string {
+  const bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
+  const chunkSize = 0x8000; // 32KB chunks
+  let binary = "";
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    const chunk = bytes.subarray(i, i + chunkSize);
+    let chunkStr = "";
+    for (let j = 0; j < chunk.length; j++) chunkStr += String.fromCharCode(chunk[j]);
+    binary += chunkStr;
+  }
+  return btoa(binary);
 }
 
 function fromBase64(b64: string): Uint8Array {
   const bin = atob(b64);
   const bytes = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  for (let i = 0; i < bin.length; i++) {
+    bytes[i] = bin.charCodeAt(i);
+  }
   return bytes;
 }
 
