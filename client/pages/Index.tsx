@@ -33,6 +33,7 @@ export default function Index() {
   const [pass, setPass] = useState("");
   const [busy, setBusy] = useState(false);
   const [showPass, setShowPass] = useState(false);
+  const [successGlow, setSuccessGlow] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
