@@ -76,22 +76,31 @@ async function deriveKey(passphrase: string, salt: Uint8Array): Promise<CryptoKe
 }
 
 export async function encryptText(plaintext: string, passphrase: string): Promise<VaultPayload> {
-  const salt = new Uint8Array(16);
-  crypto.getRandomValues(salt);
-  const iv = new Uint8Array(12);
-  crypto.getRandomValues(iv);
+  try {
+    const salt = new Uint8Array(16);
+    crypto.getRandomValues(salt);
+    const iv = new Uint8Array(12);
+    crypto.getRandomValues(iv);
 
-  const key = await deriveKey(passphrase, salt);
-  const data = textEncoder.encode(plaintext);
-  const cipherBuf = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, data);
+    console.log("encryptText: deriving key...");
+    const key = await deriveKey(passphrase, salt);
+    const data = textEncoder.encode(plaintext);
+    console.log("encryptText: encrypting, iv length", iv.length, "data len", data.length);
+    const cipherBuf = await crypto.subtle.encrypt({ name: "AES-GCM", iv: iv.buffer ?? iv }, key, data);
+    console.log("encryptText: encryption completed, cipher size", (cipherBuf as ArrayBuffer).byteLength);
 
-  return {
-    v: 1,
-    salt: toBase64(salt),
-    iv: toBase64(iv),
-    cipher: toBase64(cipherBuf),
-    ts: Date.now(),
-  };
+    const payload: VaultPayload = {
+      v: 1,
+      salt: toBase64(salt),
+      iv: toBase64(iv),
+      cipher: toBase64(cipherBuf),
+      ts: Date.now(),
+    };
+    return payload;
+  } catch (err) {
+    console.error("encryptText failed:", err);
+    throw new Error("Encryption failed");
+  }
 }
 
 export async function decryptToText(payload: VaultPayload, passphrase: string): Promise<string> {
