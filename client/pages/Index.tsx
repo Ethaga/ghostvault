@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
-import { Lock, Shield, Flame, KeyRound, Trash2, ShieldCheck } from "lucide-react";
+import { Lock, Shield, Flame, KeyRound, Trash2, ShieldCheck, Eye, EyeOff } from "lucide-react";
 import {
   VAULT_KEY,
   encryptText,
@@ -31,6 +31,7 @@ export default function Index() {
   const [mode, setMode] = useState<"encrypt" | "decrypt">("encrypt");
   const [pass, setPass] = useState("");
   const [busy, setBusy] = useState(false);
+  const [showPass, setShowPass] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -193,14 +194,26 @@ export default function Index() {
           </DialogHeader>
 
           <div className="grid gap-3">
-            <input
-              ref={inputRef}
-              type="password"
-              value={pass}
-              onChange={(e) => setPass(e.target.value)}
-              placeholder="••••••••••••"
-              className="w-full rounded-md bg-secondary/60 px-3 py-2 outline-none ring-1 ring-transparent focus:ring-2 focus:ring-primary caret-primary glow"
-            />
+            <div className="flex items-center gap-2">
+              <input
+                ref={inputRef}
+                type={showPass ? "text" : "password"}
+                value={pass}
+                onChange={(e) => setPass(e.target.value)}
+                placeholder="••••••••••••"
+                className="flex-1 rounded-md bg-secondary/60 px-3 py-2 outline-none ring-1 ring-transparent focus:ring-2 focus:ring-primary caret-primary glow"
+              />
+              <button
+                type="button"
+                aria-pressed={showPass}
+                onClick={() => setShowPass((s) => !s)}
+                className="eye-btn btn-outline-neon p-2 rounded-md glow"
+                title={showPass ? "Hide passphrase" : "Show passphrase"}
+              >
+                {showPass ? <EyeOff className="h-4 w-4 text-primary" /> : <Eye className="h-4 w-4 text-primary" />}
+                <span className="sr-only">{showPass ? "Hide" : "Show"} passphrase</span>
+              </button>
+            </div>
             <div className="flex items-center gap-2">
               {mode === "encrypt" && (
                 <Button
