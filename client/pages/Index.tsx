@@ -172,12 +172,6 @@ export default function Index() {
         </main>
       </div>
 
-      <footer className="mx-auto max-w-3xl px-4 py-8 text-center text-xs text-muted-foreground">
-        <a href="https://drive.google.com/drive/folders/1qg8O35K1SAB4tCcasXUyCCYFC66_H9p1?usp=sharing" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">
-          Read the Whitepaper — DAWN Black Box
-        </a>
-      </footer>
-
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="bg-black/80 backdrop-blur border-primary/40 glow">
           <DialogHeader>
