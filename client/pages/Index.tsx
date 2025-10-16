@@ -151,10 +151,10 @@ export default function Index() {
               />
 
               <div className="mt-4 flex flex-wrap items-center gap-3">
-                <Button onClick={() => openKeyModal("encrypt")} className="glow" disabled={!note.trim()}>
+                <Button onClick={() => openKeyModal("encrypt")} className="btn-neon glow" disabled={!note.trim()}>
                   <Lock className="h-4 w-4" /> Encrypt
                 </Button>
-                <Button variant="outline" onClick={() => openKeyModal("decrypt")} className="border-primary/40 text-primary hover:bg-primary/10 glow" disabled={!hasVault}>
+                <Button variant="outline" onClick={() => openKeyModal("decrypt")} className="btn-outline-neon glow" disabled={!hasVault}>
                   <KeyRound className="h-4 w-4" /> Decrypt
                 </Button>
                 {hasVault && (
